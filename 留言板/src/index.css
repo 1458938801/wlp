@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: sans-serif;
+}
+.btn{
+  display: inline-block;
+  padding: 5px;
+  height: 30px;
+
+  background: dodgerblue;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 4px;
+  float: right;
+}
+.btn:hover{
+  color:white;
+  background: #0000ee;
+}
+.btn:focus {
+  outline: none;
+}

@@ -1,0 +1,118 @@
+方法定义在App.js中，然后再层层往里传
+npm run eject作用就是把之前的默认配置全部暴露出来，因此可以自定义修改webpack的配置
+
+
+## 编写静态页面
+  * HTML
+  * CSS
+
+## 拆分组件
+  ```
+  App-------------应用组件
+    TodoHeader---------------头部组件
+    TodoMain-----------------主体组件
+      TodoItem---------------------todo项组件
+    TodoFooter---------------尾部组件
+  ```
+## 实现静态组件
+  * 拆分页面
+  * 拆分样式(就近原则)
+
+## 分析确定组件的state和props
+  * App:
+    * state:
+      * todos: [{isDone: false, title: '吃饭'}, {isDone: false, title: '睡觉'}]
+      * isAllChecked: boolean
+  * TodoHeader
+    * props: addTodo/func
+  * todoMain
+    * props:
+      * todos/array
+      * deleteTodo/func
+      * updateCheck/func
+  * todoItem
+    * props:
+      * todo/object
+      * deleteTodo/func
+      * index/number
+      * updateCheck/func
+  * TodoFooter
+    * props:
+      * isAllChecked/boolean
+      * doneCount/number
+      * totalCount/number
+      * deleteDoneTodos/func
+      * changeAllChecked/func
+
+## 实现动态组件
+  * 动态显示初始化todos列表数据
+    * App  state--> todos
+    * 初始化todos: constructor()
+    * todos的结构: [{title:'xx', isDone:false}, {}]
+    * 通过标签属性向-->TodoMain-->TodoItem传递todos
+  * 添加新的todo, 显示在列表首位(方法：addTodo)
+  * 勾选指定todo  (方法：updateCheck)
+  * 删除指定todo  （方法：deleteTodo，删除时一般传入参数index）
+  * 显示完成的/所有的todo的数量  (doneCount/totalCount)
+  * 全选/全不选                      (changeAllChecked)  （通过onChange绑定事件改变state）
+  * 删除所有选中的                (deleteDoneTodos)
+
+
+* 父组件向子组件传递数据
+  * 数据(包含对数据操作的函数)都在父组件里
+  * 数据只能是当前组件和子组件使用, 不能给兄弟组件使用
+  * 共同的数据放在父组件上, 特有的数据放在自己组件内部
+  * 一般数据---> 用于组件页面显示
+  * 函数数据--->调用执行
+  * 父子组件的通信
+
+* ES6新语法
+  * const/let
+  * 解构赋值: const {a, b} = this.props     (由父组件向子组件传递数据)
+  * 箭头函数:
+     * 组件的自定义方法: xxx = () => {}
+     * map/filter的回调方法: (item, index) => {}
+     * 优点:
+      * 简洁
+      * 没有自己的this,使用引用this查找的是外部this
+  * 扩展运算符(...)
+    解构对象:  const MyProps = {}
+    <Xxx {...MyProps}>
+
+  * 数组传送方法：map(映射),filter（过滤）,forEach（遍历）
+    map():返回一个新的Array，每个元素为调用func的结果
+    filter():返回一个符合func条件的元素数组
+    forEach():没有返回值，只是针对每个元素调用func
+
+
+
+  *  onChange,onClick,change,click区别
+     * onclick 和 click :是点击事件；
+     * onchange 和 change：是改变事件；
+     *onchange和onclick都是js方法
+        可以在标签元素上使用  <input  onchange=""></input>   <input  onclick=""></input>
+     *change和click是jquery方法
+        $("#id").change（function（）{ code
+        }）;
+        或者:
+        $('').click（function（）{code
+        }）;
+
+  *项目编辑运行打包
+     npm run build
+     npm install -g pushstate-server（static server）
+     pushstate-server build
+     start http://localhost:9000
+
+
+  * 实现组件间通信方式2:
+    * 使用消息订阅(subscribe--相当于设置绑定监听)-发布(publish--相当于点击事件)机制
+         优点：不用由父组件逐层向里传递，可以直接传递
+         用法：传递行为（函数），一般数据还是用props传
+    * 工具库: PubSubJS
+    * 下载: npm install pubsub-js --save
+    * 使用:
+
+      import PubSub from 'pubsub-js' //引入
+      PubSub.subscribe('delete', function(data){ }); //订阅（'delete'：消息的名称，function(data){ }：回调函数，data相当于点击事件的event）
+      PubSub.publish('delete', data) //发布消息      （'delete'：名称，data：发布的数据，与上面的data不一定一样）

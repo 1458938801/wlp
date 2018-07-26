@@ -1,0 +1,19 @@
+li{
+    list-style: none;
+    line-height: 30px;
+    height: 30px;
+    padding: 0 5px;
+}
+li label{
+    float:left;
+}
+li label input{
+    margin-right: 6px;
+    top:-1px;
+    position: relative;
+}
+li button{
+    float: right;
+    display:none;
+    margin-top: 2px;
+}
